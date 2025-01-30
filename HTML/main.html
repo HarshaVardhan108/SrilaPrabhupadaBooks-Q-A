@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="./assets/om-symbol.svg">
+    <link rel="icon" type="image/svg+xml" href="/assets/om-symbol.svg">
+    <link rel="stylesheet" href="/CSS/style.css">
     <title>Bhakti Quiz - Spiritual Knowledge Test</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
@@ -35,7 +36,7 @@
         }
 
         .nav-buttons {
-            position: fixed;
+            position:sticky;
             top: 0;
             left: 0;
             right: 0;
@@ -94,6 +95,34 @@
             color: white;
         }
 
+        .search-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
         .books-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -112,12 +141,20 @@
             opacity: 0;
             transform: translateY(20px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease, opacity 0.3s ease;
         }
 
         .book-card:hover {
             transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-card.hidden {
+            display: none;
         }
 
         .book-title {
@@ -202,12 +239,55 @@
                 gap: 1rem;
             }
         }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .scroll-top-btn.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        @media (max-width: 768px) {
+            .scroll-top-btn {
+                bottom: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="nav-buttons">
-        <a href="dashboard.html" class="nav-btn">View Dashboard</a>
+        <a href="/HTML/dashboard.html" class="nav-btn">View Dashboard</a>
         <button class="nav-btn" onclick="handleLogout()">Logout</button>
     </div>
 
@@ -217,56 +297,222 @@
             <p>Explore the divine knowledge through these transcendental quizzes</p>
         </div>
 
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search books..." class="search-input">
+        </div>
+
         <div class="books-grid">
             <div class="book-card">
                 <div class="book-title">On the Way to Krishna</div>
-                <a href="book1.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/owk.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
                 <div class="book-title">Matchless Gift</div>
-                <a href="book2.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/mg.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
                 <div class="book-title">Bhagavad Gita As It Is</div>
-                <a href="book3.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/bg.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
                 <div class="book-title">Nectar of Devotion</div>
-                <a href="book4.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/nod.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
                 <div class="book-title">Srimad Bhagavatam</div>
-                <a href="book5.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/sb.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
                 <div class="book-title">Teachings of Lord Chaitanya</div>
-                <a href="book6.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/tlc.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
-                <div class="book-title">The Science of Self-Realization</div> 
-                <a href="book7.html" class="start-quiz-btn">Start Quiz</a>
+                <div class="book-title">The Science of Self-Realization</div>
+                <a href="/HTML/ssr.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
                 <div class="book-title">Krishna - The Supreme Personality of Godhead</div>
-                <a href="book8.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/kb.html" class="start-quiz-btn">Start Quiz</a>
             </div>
             <div class="book-card">
                 <div class="book-title">Sri Chaitanya Charitamrita</div>
-                <a href="book9.html" class="start-quiz-btn">Start Quiz</a>
+                <a href="/HTML/cc.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">The Nectar of Instruction</div>
+                <a href="/HTML/noi.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Easy Journey to Other Planets</div>
+                <a href="/HTML/ejop.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Civilization and Transcendence</div>
+                <a href="/HTML/cat.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Perfect Questions, Perfect Answers</div>
+                <a href="/HTML/pqpa.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Teachings of Lord Kapila</div>
+                <a href="/HTML/tlk.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Teachings of Queen Kunti</div>
+                <a href="/HTML/tqk.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Life Comes from Life</div>
+                <a href="/HTML/lcfl.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">The Perfection of Yoga</div>
+                <a href="/HTML/poy.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Beyond Birth and Death</div>
+                <a href="/HTML/bbd.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Renunciation Through Wisdom</div>
+                <a href="/HTML/rtw.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Raja-Vidya: The King of Knowledge</div>
+                <a href="/HTML/rv.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Message of Godhead</div>
+                <a href="/HTML/mog.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Light of the Bhagavata</div>
+                <a href="/HTML/lotb.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Sri Isopanisad</div>
+                <a href="/HTML/iso.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Journey of Self-Discovery</div>
+                <a href="/HTML/josd.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">The Laws of Nature: An Infallible Justice</div>
+                <a href="/HTML/lon.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Transcendental Teachings of Prahlada Maharaja</div>
+                <a href="/HTML/ttpm.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">A Second Chance</div>
+                <a href="/HTML/asc.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Mukunda-mala-stotra</div>
+                <a href="/HTML/mms.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Narada-bhakti-sutra</div>
+                <a href="/HTML/nbs.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Dharma: The Way of Transcendence</div>
+                <a href="/HTML/dwt.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Quest for Enlightenment</div>
+                <a href="/HTML/qfe.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Beyond Illusion & Doubt</div>
+                <a href="/HTML/bid.html" class="start-quiz-btn">Start Quiz</a>
             </div>
         </div>
     </div>
 
+    <button class="scroll-top-btn" id="scrollTopBtn" title="Go to top">
+        ↑
+    </button>
+
     <script>
         // Check if user is logged in
         if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = 'index.html';
+            window.location.href = '/index.html';
         }
 
         function handleLogout() {
             localStorage.removeItem('isLoggedIn');
-            window.location.href = 'index.html';
+            window.location.href = '/HTML/index.html';
         }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const bookCards = document.querySelectorAll('.book-card');
+
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            bookCards.forEach(card => {
+                const title = card.querySelector('.book-title').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm)) {
+                    card.classList.remove('hidden');
+                    // Highlight matching text
+                    const titleElement = card.querySelector('.book-title');
+                    if (searchTerm) {
+                        const regex = new RegExp(`(${searchTerm})`, 'gi');
+                        titleElement.innerHTML = titleElement.textContent.replace(
+                            regex,
+                            '<span style="background: rgba(255, 255, 255, 0.2); border-radius: 3px; padding: 0 4px;">$1</span>'
+                        );
+                    } else {
+                        titleElement.innerHTML = titleElement.textContent;
+                    }
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+
+        // Clear search when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('#searchInput') && !e.target.closest('.book-card')) {
+                searchInput.value = '';
+                bookCards.forEach(card => {
+                    card.classList.remove('hidden');
+                    const titleElement = card.querySelector('.book-title');
+                    titleElement.innerHTML = titleElement.textContent;
+                });
+            }
+        });
+
+        // Prevent form submission on enter
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+
+        // Scroll to top functionality
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) { // Show button after scrolling 300px
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     </script>
 </body>
 

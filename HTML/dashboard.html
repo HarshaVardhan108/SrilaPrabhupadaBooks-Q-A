@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="./assets/om-symbol.svg">
+    <link rel="icon" type="image/svg+xml" href="/assets/om-symbol.svg">
+    <link rel="stylesheet" href="/CSS/style.css">
     <title>Bhakti Quiz - Spiritual Knowledge Test</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
@@ -233,7 +234,7 @@
 <body>
     <div class="dashboard-container">
         <div class="nav-buttons">
-            <a href="main.html" class="nav-btn">Return to Main</a>
+            <a href="/HTML/main.html" class="nav-btn">Return to Main</a>
             <button class="nav-btn" onclick="handleLogout()">Logout</button>
         </div>
         
@@ -258,7 +259,7 @@
     <script>
         // Check if user is logged in
         if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = 'index.html';
+            window.location.href = '/index.html';
         }
 
         // Get user info from localStorage
@@ -274,7 +275,7 @@
 
         function handleLogout() {
             localStorage.removeItem('isLoggedIn');
-            window.location.href = 'index.html';
+            window.location.href = '/HTML/index.html';
         }
 
         function formatDate(dateString) {
@@ -304,7 +305,7 @@
                     <div class="no-scores">
                         <h3>No quizzes completed yet</h3>
                         <p>Start taking quizzes to see your progress here!</p>
-                        <a href="main.html" class="retry-btn">Go to Quizzes</a>
+                        <a href="/HTML/main.html" class="retry-btn">Go to Quizzes</a>
                     </div>
                 `;
                 return;
@@ -332,6 +333,11 @@
 
         // Update scores when page loads
         updateScores();
+
+        // Update back button
+        function goBack() {
+            window.location.href = '/HTML/main.html';
+        }
     </script>
 </body>
 </html> 
