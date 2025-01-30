@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./assets/om-symbol.svg">
+    <title>Bhakti Quiz - Spiritual Knowledge Test</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .user-details h2 {
+            margin: 0;
+            color: #2d3748;
+        }
+
+        .user-details p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .score-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .score-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .score-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .score-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-number {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .score-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #edf2f7;
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .retry-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            background: #764ba2;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .no-scores {
+            text-align: center;
+            color: #666;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+        }
+
+        .nav-buttons {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+
+            .scores-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                position: static;
+                justify-content: center;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="nav-buttons">
+            <a href="main.html" class="nav-btn">Return to Main</a>
+            <button class="nav-btn" onclick="handleLogout()">Logout</button>
+        </div>
+        
+        <div class="dashboard-header">
+            <h1>Quiz Dashboard</h1>
+        </div>
+
+        <div class="user-info">
+            <div class="user-avatar">U</div>
+            <div class="user-details">
+                <h2>User Name</h2>
+                <p>user@email.com</p>
+                <p>Total Quizzes Completed: <strong>5</strong></p>
+            </div>
+        </div>
+
+        <div class="scores-grid" id="scoresGrid">
+            <!-- Score cards will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = 'index.html';
+        }
+
+        // Get user info from localStorage
+        const userInfo = {
+            name: localStorage.getItem('userName') || 'User Name',
+            email: localStorage.getItem('userEmail') || 'user@email.com'
+        };
+
+        // Update user info in the DOM
+        document.querySelector('.user-details h2').textContent = userInfo.name;
+        document.querySelector('.user-details p').textContent = userInfo.email;
+        document.querySelector('.user-avatar').textContent = userInfo.name[0].toUpperCase();
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'index.html';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+
+            if (diff < 24 * 60 * 60 * 1000) {
+                return 'Today';
+            } else if (diff < 48 * 60 * 60 * 1000) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
+
+        function updateScores() {
+            const scoresGrid = document.getElementById('scoresGrid');
+            const quizScores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+            const completedQuizzes = Object.keys(quizScores).length;
+
+            // Update total quizzes completed
+            document.querySelector('.user-details p:last-child strong').textContent = completedQuizzes;
+
+            if (completedQuizzes === 0) {
+                scoresGrid.innerHTML = `
+                    <div class="no-scores">
+                        <h3>No quizzes completed yet</h3>
+                        <p>Start taking quizzes to see your progress here!</p>
+                        <a href="main.html" class="retry-btn">Go to Quizzes</a>
+                    </div>
+                `;
+                return;
+            }
+
+            scoresGrid.innerHTML = '';
+            
+            Object.entries(quizScores).forEach(([bookId, data]) => {
+                const scoreCard = document.createElement('div');
+                scoreCard.className = 'score-card';
+                scoreCard.innerHTML = `
+                    <div class="score-title">${data.title}</div>
+                    <div class="score-details">
+                        <div class="score-number">${Math.round(data.score)}%</div>
+                        <div class="score-date">Last attempt: ${formatDate(data.date)}</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${data.score}%"></div>
+                    </div>
+                    <a href="${bookId}.html" class="retry-btn">Retry Quiz</a>
+                `;
+                scoresGrid.appendChild(scoreCard);
+            });
+        }
+
+        // Update scores when page loads
+        updateScores();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./assets/om-symbol.svg">
+    <title>Bhakti Quiz - Spiritual Knowledge Test</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .quiz-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1rem;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .option:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        .option.selected label {
+            color: white;
+        }
+
+        .option input[type="radio"] {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .quiz-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .question {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Add these new styles */
+        .score-display {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .score-display.show {
+            display: block;
+        }
+
+        .score-text {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .score-number {
+            font-size: 3rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .retry-btn {
+            margin-top: 1rem;
+            background: #667eea;
+        }
+
+        .option.correct {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+
+        .option.incorrect {
+            background: #ff5252;
+            border-color: #ff5252;
+            color: white;
+        }
+
+        .option.correct label,
+        .option.incorrect label {
+            color: white;
+        }
+
+        .answer-explanation {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #2d3748;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .answer-explanation.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>On the Way to Krishna</h1>
+            <p>Test your knowledge with these questions</p>
+        </div>
+
+        <form id="quiz-form" onsubmit="calculateScore(event)">
+            <div class="question-card">
+                <div class="question">
+                    <span>1.</span> What is the primary message of Krishna consciousness?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1a" value="a" data-score="0">
+                        <label for="q1a">Material prosperity</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1b" value="b" data-score="10">
+                        <label for="q1b">Pure devotional service to Krishna</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1c" value="c" data-score="0">
+                        <label for="q1c">Physical exercise and meditation</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1d" value="d" data-score="0">
+                        <label for="q1d">Social reformation</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">
+                    <span>2.</span> Who is the supreme controller according to Krishna consciousness?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2a" value="a" data-score="0">
+                        <label for="q2a">The demigods</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2b" value="b" data-score="10">
+                        <label for="q2b">Lord Krishna</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2c" value="c" data-score="0">
+                        <label for="q2c">The living entities</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" id="q2d" value="d" data-score="0">
+                        <label for="q2d">Material nature</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">
+                    <span>3.</span> What is the proper structure of offering obeisances to the spiritual master?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3a" value="a" data-score="0">
+                        <label for="q3a">Standing with folded hands</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3b" value="b" data-score="10">
+                        <label for="q3b">Lying flat on the ground with eight parts touching (dandavat pranams)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3c" value="c" data-score="0">
+                        <label for="q3c">Sitting in lotus position with eyes closed</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" id="q3d" value="d" data-score="0">
+                        <label for="q3d">Bowing head slightly with hands in prayer position</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question">
+                    <span>4.</span> What is the correct structure of the Hare Krishna Maha-mantra?
+                </div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4a" value="a" data-score="10">
+                        <label for="q4a">Hare Krishna Hare Krishna, Krishna Krishna Hare Hare, Hare Rama Hare Rama, Rama Rama Hare Hare</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4b" value="b" data-score="0">
+                        <label for="q4b">Krishna Hare Krishna Hare, Hare Hare Krishna Krishna, Rama Hare Rama Hare, Hare Hare Rama Rama</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4c" value="c" data-score="0">
+                        <label for="q4c">Hare Rama Hare Rama, Rama Rama Hare Hare, Hare Krishna Hare Krishna, Krishna Krishna Hare Hare</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" id="q4d" value="d" data-score="0">
+                        <label for="q4d">Krishna Krishna Hare Hare, Hare Hare Krishna Krishna, Rama Rama Hare Hare, Hare Hare Rama Rama</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button type="button" class="btn" onclick="previousQuestion()">Previous</button>
+                <button type="submit" class="btn">Submit Answers</button>
+                <button type="button" class="btn" onclick="nextQuestion()">Next</button>
+            </div>
+        </form>
+
+        <div class="score-display" id="scoreDisplay">
+            <div class="score-text">Your Score:</div>
+            <div class="score-number" id="scoreNumber">0</div>
+            <button class="btn retry-btn" onclick="retryQuiz()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.option').forEach(option => {
+            const radio = option.querySelector('input[type="radio"]');
+            
+            radio.addEventListener('change', () => {
+                const questionCard = option.closest('.question-card');
+                questionCard.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                if (radio.checked) {
+                    option.classList.add('selected');
+                }
+            });
+        });
+
+        function calculateScore(event) {
+            event.preventDefault();
+            let totalScore = 0;
+            const form = document.getElementById('quiz-form');
+            const questions = form.querySelectorAll('.question-card');
+            
+            questions.forEach(question => {
+                const selectedOption = question.querySelector('input[type="radio"]:checked');
+                const allOptions = question.querySelectorAll('.option');
+                const correctOption = question.querySelector('input[data-score="10"]').closest('.option');
+                
+                allOptions.forEach(option => {
+                    const radio = option.querySelector('input[type="radio"]');
+                    option.classList.remove('selected');
+                    
+                    if (radio === selectedOption) {
+                        if (radio.dataset.score === "10") {
+                            option.classList.add('correct');
+                            totalScore += 10;
+                        } else {
+                            option.classList.add('incorrect');
+                            // Also show the correct answer
+                            correctOption.classList.add('correct');
+                        }
+                    }
+                });
+
+                // Add explanation div if not exists
+                let explanation = question.querySelector('.answer-explanation');
+                if (!explanation) {
+                    explanation = document.createElement('div');
+                    explanation.className = 'answer-explanation';
+                    question.appendChild(explanation);
+                }
+
+                // Show explanation for this question
+                if (selectedOption) {
+                    if (selectedOption.dataset.score === "10") {
+                        explanation.innerHTML = '<strong>Correct!</strong> Well done!';
+                    } else {
+                        explanation.innerHTML = '<strong>Incorrect.</strong> The correct answer is highlighted in green.';
+                    }
+                    explanation.classList.add('show');
+                }
+            });
+
+            // Calculate percentage
+            const totalQuestions = questions.length;
+            const scorePercentage = (totalScore / (totalQuestions * 10)) * 100;
+
+            // Save score to localStorage
+            const quizScores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+            quizScores['book1'] = {
+                score: scorePercentage,
+                date: new Date().toISOString(),
+                title: 'On the Way to Krishna'
+            };
+            localStorage.setItem('quizScores', JSON.stringify(quizScores));
+
+            // Display score
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreNumber = document.getElementById('scoreNumber');
+            scoreNumber.textContent = `${scorePercentage}%`;
+            scoreDisplay.classList.add('show');
+
+            // Disable all radio buttons
+            form.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = true;
+            });
+
+            // Hide submit button
+            form.querySelector('button[type="submit"]').style.display = 'none';
+
+            // Add view dashboard button
+            const dashboardBtn = document.createElement('button');
+            dashboardBtn.className = 'btn';
+            dashboardBtn.style.marginTop = '1rem';
+            dashboardBtn.textContent = 'View Dashboard';
+            dashboardBtn.onclick = () => window.location.href = 'dashboard.html';
+            scoreDisplay.appendChild(dashboardBtn);
+        }
+
+        function retryQuiz() {
+            const form = document.getElementById('quiz-form');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            
+            // Reset form
+            form.reset();
+            
+            // Remove all correct/incorrect classes
+            form.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // Hide explanations
+            form.querySelectorAll('.answer-explanation').forEach(exp => {
+                exp.classList.remove('show');
+            });
+
+            // Enable all radio buttons
+            form.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
+
+            // Show submit button
+            form.querySelector('button[type="submit"]').style.display = 'block';
+            
+            // Hide score display
+            scoreDisplay.classList.remove('show');
+            
+            // Remove dashboard button if exists
+            const dashboardBtn = scoreDisplay.querySelector('button:not(.retry-btn)');
+            if (dashboardBtn) {
+                dashboardBtn.remove();
+            }
+        }
+
+        function previousQuestion() {
+            // Add navigation logic
+        }
+
+        function nextQuestion() {
+            // Add navigation logic
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./assets/om-symbol.svg">
+    <title>Bhakti Quiz - Spiritual Knowledge Test</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            position: relative;
+            background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/assets/krishna-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            filter: brightness(0.4);
+            z-index: -1;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem 2rem;  /* Increased top padding to account for fixed nav */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .book-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-quiz-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .start-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Add animation delays for cards */
+        .book-card:nth-child(1) { animation-delay: 0.1s; }
+        .book-card:nth-child(2) { animation-delay: 0.2s; }
+        .book-card:nth-child(3) { animation-delay: 0.3s; }
+        .book-card:nth-child(4) { animation-delay: 0.4s; }
+        .book-card:nth-child(5) { animation-delay: 0.5s; }
+        .book-card:nth-child(6) { animation-delay: 0.6s; }
+        .book-card:nth-child(7) { animation-delay: 0.7s; }
+        .book-card:nth-child(8) { animation-delay: 0.8s; }
+        .book-card:nth-child(9) { animation-delay: 0.9s; }
+
+        @media (max-width: 768px) {
+            .nav-buttons {
+                position: fixed;
+                padding: 0.8rem;
+                justify-content: center;
+            }
+
+            .nav-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .main-container {
+                padding-top: 5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-container {
+                margin: 1rem auto;
+                padding: 1rem;
+            }
+
+            .books-grid {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <a href="dashboard.html" class="nav-btn">View Dashboard</a>
+        <button class="nav-btn" onclick="handleLogout()">Logout</button>
+    </div>
+
+    <div class="main-container">
+        <div class="header">
+            <h1>Srila Prabhupada's Books</h1>
+            <p>Explore the divine knowledge through these transcendental quizzes</p>
+        </div>
+
+        <div class="books-grid">
+            <div class="book-card">
+                <div class="book-title">On the Way to Krishna</div>
+                <a href="book1.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Matchless Gift</div>
+                <a href="book2.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Bhagavad Gita As It Is</div>
+                <a href="book3.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Nectar of Devotion</div>
+                <a href="book4.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Srimad Bhagavatam</div>
+                <a href="book5.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Teachings of Lord Chaitanya</div>
+                <a href="book6.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">The Science of Self-Realization</div> 
+                <a href="book7.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Krishna - The Supreme Personality of Godhead</div>
+                <a href="book8.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+            <div class="book-card">
+                <div class="book-title">Sri Chaitanya Charitamrita</div>
+                <a href="book9.html" class="start-quiz-btn">Start Quiz</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = 'index.html';
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>
