@@ -15,7 +15,6 @@
     <title>Bhakti Quiz - Spiritual Knowledge Test</title>
 
     <style>
-
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 
@@ -56,17 +55,21 @@
 
             animation: fadeIn 1s ease-in;
 
+            overflow: hidden;
+
         }
 
 
 
-        .container > .image,
+        .container>.image,
 
-        .container > .logIn {
+        .container>.logIn {
 
             flex: 1;
 
-            height: 100%;
+            min-width: 47%;
+
+            height: 100vh;
 
             position: relative;
 
@@ -79,6 +82,8 @@
             position: relative;
 
             overflow: hidden;
+
+            flex-basis: 50%;
 
         }
 
@@ -222,6 +227,8 @@
 
         .logIn {
 
+            flex-basis: 50%;
+
             background: rgba(255, 255, 255, 0.1);
 
             backdrop-filter: blur(10px);
@@ -232,7 +239,7 @@
 
             align-items: center;
 
-            padding: 2rem;
+            padding: 1rem;
 
         }
 
@@ -240,11 +247,13 @@
 
         fieldset {
 
-            width: 100%;
+            width: 90%;
 
             max-width: 400px;
 
-            padding: 2.5rem;
+            padding: 2rem;
+
+            margin: 1rem;
 
             border: none;
 
@@ -526,67 +535,113 @@
 
         /* Add responsive design */
 
-        @media (max-width: 768px) {
-
+        @media (max-width: 968px) {
             .container {
-
                 flex-direction: column;
-
+                overflow-y: auto;
+                overflow-x: hidden;
             }
 
-
+            .container>.image,
+            .container>.logIn {
+                min-width: 100%;
+                height: auto;
+            }
 
             .image {
-
-                height: 30vh;
-
+                height: 40vh;
+                flex-basis: auto;
             }
 
-
+            .image img {
+                height: 40vh;
+                object-position: top;
+            }
 
             .logIn {
-
-                height: 70vh;
-
+                flex-basis: auto;
+                height: 60vh;
+                padding: 1rem;
             }
-
-
 
             fieldset {
-
                 padding: 1.5rem;
-
+                margin: 0.5rem;
+                max-width: 80%;
             }
-
-
 
             .image-text h1 {
-
-                font-size: 2.5rem;
-
+                font-size: 2rem;
                 padding-bottom: 15px;
-
             }
-
-
 
             .image-text p {
-
-                font-size: 1.1rem;
-
+                font-size: 1rem;
             }
 
-
-
-            .image-text h1::after {
-
-                width: 60px;
-
+            /* Remove the horizontal line on mobile */
+            hr {
+                display: none;
             }
-
         }
 
+        @media (max-width: 480px) {
+            .image {
+                height: 35vh;
+            }
 
+            .image img {
+                height: 35vh;
+            }
+
+            .logIn {
+                height: 65vh;
+            }
+
+            .image-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .image-text p {
+                font-size: 0.9rem;
+                padding: 0 1rem;
+            }
+
+            fieldset {
+                padding: 1rem;
+                margin: 0.25rem;
+            }
+
+            input,
+            button {
+                padding: 0.7rem;
+            }
+
+            .form-title h3 {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Add styles for landscape orientation on mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .container {
+                flex-direction: row;
+            }
+
+            .image {
+                height: 100vh;
+                flex-basis: 40%;
+            }
+
+            .image img {
+                height: 100%;
+            }
+
+            .logIn {
+                height: 100vh;
+                flex-basis: 60%;
+            }
+        }
 
         .auth-toggle {
 
@@ -679,7 +734,6 @@
             margin: 0;
 
         }
-
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -728,7 +782,8 @@
 
                     <div class="password-field">
 
-                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password"
+                            required>
 
                         <i class="fas fa-eye" onclick="togglePassword('loginPassword')"></i>
 
@@ -760,7 +815,8 @@
 
                     <div class="password-field">
 
-                        <input type="password" id="signupPassword" name="password" placeholder="Create a password" required>
+                        <input type="password" id="signupPassword" name="password" placeholder="Create a password"
+                            required>
 
                         <i class="fas fa-eye" onclick="togglePassword('signupPassword')"></i>
 
@@ -770,7 +826,8 @@
 
                     <div class="password-field">
 
-                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                        <input type="password" id="confirmPassword" name="confirmPassword"
+                            placeholder="Confirm your password" required>
 
                         <i class="fas fa-eye" onclick="togglePassword('confirmPassword')"></i>
 
@@ -854,7 +911,7 @@
 
             const icon = input.nextElementSibling;
 
-            
+
 
             if (input.type === 'password') {
 
@@ -882,7 +939,7 @@
 
             event.preventDefault();
 
-            
+
 
             const email = document.getElementById('loginEmail').value;
 
@@ -922,7 +979,7 @@
 
             event.preventDefault();
 
-            
+
 
             const name = document.getElementById('signupName').value;
 
