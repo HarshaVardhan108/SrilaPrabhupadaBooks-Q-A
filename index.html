@@ -536,89 +536,127 @@
         /* Add responsive design */
 
         @media (max-width: 968px) {
+            body {
+                overflow-y: auto;
+            }
+
             .container {
                 flex-direction: column;
+                min-height: 100vh;
                 overflow-y: auto;
-                overflow-x: hidden;
+                align-items: center;
             }
 
             .container>.image,
             .container>.logIn {
                 min-width: 100%;
-                height: auto;
+                flex: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             .image {
-                height: 40vh;
+                height: 35vh;
                 flex-basis: auto;
             }
 
             .image img {
-                height: 40vh;
-                object-position: top;
+                height: 100%;
+                object-position: center 20%;
             }
 
-            .logIn {
-                flex-basis: auto;
-                height: 60vh;
+            .image-text {
                 padding: 1rem;
-            }
-
-            fieldset {
-                padding: 1.5rem;
-                margin: 0.5rem;
-                max-width: 80%;
             }
 
             .image-text h1 {
                 font-size: 2rem;
-                padding-bottom: 15px;
+                padding-bottom: 10px;
             }
 
             .image-text p {
                 font-size: 1rem;
+                margin-top: 0.5rem;
             }
 
-            /* Remove the horizontal line on mobile */
-            hr {
-                display: none;
+            .logIn {
+                min-height: 65vh;
+                width: 100%;
+                padding: 1rem;
+            }
+
+            fieldset {
+                width: 90%;
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 1.5rem;
+            }
+
+            form {
+                gap: 0.8rem;
+                width: 100%;
+                align-items: center;
+            }
+
+            .form-title {
+                width: 100%;
+                text-align: center;
+            }
+
+            .password-field {
+                width: 100%;
+                position: relative;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.8rem;
+            }
+
+            .auth-toggle {
+                width: 100%;
+                text-align: center;
+                margin-top: 1rem;
             }
         }
 
         @media (max-width: 480px) {
             .image {
-                height: 35vh;
-            }
-
-            .image img {
-                height: 35vh;
-            }
-
-            .logIn {
-                height: 65vh;
+                height: 30vh;
             }
 
             .image-text h1 {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
             }
 
-            .image-text p {
-                font-size: 0.9rem;
-                padding: 0 1rem;
+            .container>.logIn {
+                padding: 0.5rem;
             }
 
             fieldset {
+                width: 95%;
                 padding: 1rem;
-                margin: 0.25rem;
-            }
-
-            input,
-            button {
-                padding: 0.7rem;
+                margin: 0 auto;
             }
 
             .form-title h3 {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
+                margin-bottom: 1rem;
+            }
+
+            input, button {
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+
+            label {
+                font-size: 0.9rem;
+                align-self: flex-start;
+            }
+
+            .password-field i {
+                right: 10px;
             }
         }
 
