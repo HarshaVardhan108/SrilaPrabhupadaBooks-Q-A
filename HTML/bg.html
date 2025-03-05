@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/webp" href="/assets/logo.webp">
+    <title>Bhagavad Gita Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .chapter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            padding: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chapter-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+        }
+
+        .chapter-btn:hover::before {
+            opacity: 1;
+        }
+
+        .chapter-number {
+            font-size: 1.2rem;
+            color: #a5b4fc;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .chapter-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: white;
+        }
+
+        .nav-buttons {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .nav-btn {
+            padding: 0.8rem 1.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .chapter-btn {
+                padding: 1.5rem;
+            }
+
+            .chapter-number {
+                font-size: 1.1rem;
+            }
+
+            .chapter-title {
+                font-size: 1.2rem;
+            }
+
+            .nav-buttons {
+                padding: 0.8rem 1.2rem;
+            }
+
+            .nav-btn {
+                padding: 0.7rem 1.4rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1rem;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 3rem;
+            color: black;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #667eea;
+        }
+
+        .option input[type="radio"] {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .option label {
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .option.selected {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        .option.correct {
+            background: rgba(72, 187, 120, 0.2) !important;
+            border: 2px solid #48bb78 !important;
+            color: #1a202c !important;
+        }
+
+        .option.incorrect {
+            background: rgba(245, 101, 101, 0.2) !important;
+            border: 2px solid #f56565 !important;
+            color: #1a202c !important;
+        }
+
+        .answer-explanation {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        .answer-explanation strong {
+            color: #4a5568;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .score-display {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .score-display h2 {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .score-display .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .retry-btn {
+            background: #667eea;
+            margin-top: 1rem;
+        }
+
+        .retry-btn:hover {
+            background: #764ba2;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav-buttons">
+        <a href="/HTML/main.html" class="nav-btn">Return to Main</a>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Bhagavad Gita Chapters</h1>
+        </div>
+
+        <div class="chapters-grid">
+            <button class="chapter-btn" onclick="startChapterQuiz(1)">
+                <span class="chapter-number">Chapter 1</span>
+                <span class="chapter-title">Observing the Armies on the Battlefield of Kuruksetra</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(2)">
+                <span class="chapter-number">Chapter 2</span>
+                <span class="chapter-title">Contents of the Gita Summarized</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(3)">
+                <span class="chapter-number">Chapter 3</span>
+                <span class="chapter-title">Karma-yoga</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(4)">
+                <span class="chapter-number">Chapter 4</span>
+                <span class="chapter-title">Transcendental Knowledge</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(5)">
+                <span class="chapter-number">Chapter 5</span>
+                <span class="chapter-title">Karma-yoga-Action in Kṛṣṇa Consciousness</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(6)">
+                <span class="chapter-number">Chapter 6</span>
+                <span class="chapter-title">Dhyāna-yoga</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(7)">
+                <span class="chapter-number">Chapter 7</span>
+                <span class="chapter-title">Knowledge of the Absolute</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(8)">
+                <span class="chapter-number">Chapter 8</span>
+                <span class="chapter-title">Attaining the Supreme</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(9)">
+                <span class="chapter-number">Chapter 9</span>
+                <span class="chapter-title">The Most Confidential Knowledge</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(10)">
+                <span class="chapter-number">Chapter 10</span>
+                <span class="chapter-title">The Opulence of the Absolute</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(11)">
+                <span class="chapter-number">Chapter 11</span>
+                <span class="chapter-title">The Universal Form</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(12)">
+                <span class="chapter-number">Chapter 12</span>
+                <span class="chapter-title">Devotional Service</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(13)">
+                <span class="chapter-number">Chapter 13</span>
+                <span class="chapter-title">Nature, the Enjoyer, and Consciousness</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(14)">
+                <span class="chapter-number">Chapter 14</span>
+                <span class="chapter-title">The Three Modes Of Material Nature</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(15)">
+                <span class="chapter-number">Chapter 15</span>
+                <span class="chapter-title">The Yoga of the Supreme Person</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(16)">
+                <span class="chapter-number">Chapter 16</span>
+                <span class="chapter-title">The Divine and Demoniac Natures</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(17)">
+                <span class="chapter-number">Chapter 17</span>
+                <span class="chapter-title">The Divisions of Faith</span>
+            </button>
+            <button class="chapter-btn" onclick="startChapterQuiz(18)">
+                <span class="chapter-number">Chapter 18</span>
+                <span class="chapter-title">Conclusion—The Perfection of Renunciation</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = '/index.html';
+        }
+
+        function startChapterQuiz(chapterNumber) {
+            if (chapterNumber === 7) {
+                const quizHTML = `
+                    <div class="quiz-container">
+                        <div class="quiz-header">
+                            <h1>Chapter 7: Knowledge of the Absolute</h1>
+                            <p>Test your understanding with these questions</p>
+                        </div>
+
+                        <form id="quiz-form" onsubmit="calculateScore(event)">
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>1.</span> According to Krishna, how many types of energies does He possess?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1a" value="a" data-score="0">
+                                        <label for="q1a">One energy - spiritual energy</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1b" value="b" data-score="10">
+                                        <label for="q1b">Two energies - material and spiritual</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1c" value="c" data-score="0">
+                                        <label for="q1c">Three energies - goodness, passion, and ignorance</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1d" value="d" data-score="0">
+                                        <label for="q1d">Four energies - earth, water, fire, and air</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>2.</span> What are the eight separated material energies mentioned in this chapter?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2a" value="a" data-score="10">
+                                        <label for="q2a">Earth, water, fire, air, ether, mind, intelligence, and false ego</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2b" value="b" data-score="0">
+                                        <label for="q2b">Body, mind, intelligence, ego, soul, spirit, consciousness, and energy</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2c" value="c" data-score="0">
+                                        <label for="q2c">Light, sound, touch, taste, smell, thought, feeling, and will</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2d" value="d" data-score="0">
+                                        <label for="q2d">Sun, moon, stars, planets, earth, water, fire, and air</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>3.</span> What is Krishna's superior energy?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3a" value="a" data-score="0">
+                                        <label for="q3a">Material nature</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3b" value="b" data-score="10">
+                                        <label for="q3b">The living entities (jiva-bhutas)</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3c" value="c" data-score="0">
+                                        <label for="q3c">The cosmic manifestation</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3d" value="d" data-score="0">
+                                        <label for="q3d">The universal form</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>4.</span> What are the four kinds of pious men who begin devotional service?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4a" value="a" data-score="10">
+                                        <label for="q4a">The distressed, the desirer of wealth, the inquisitive, and the seeker of knowledge</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4b" value="b" data-score="0">
+                                        <label for="q4b">The brahmana, kshatriya, vaishya, and shudra</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4c" value="c" data-score="0">
+                                        <label for="q4c">The yogis, jnanis, karmis, and bhaktas</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4d" value="d" data-score="0">
+                                        <label for="q4d">The sannyasis, vanaprasthas, grihasthas, and brahmacharis</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>5.</span> According to Krishna, what covers the living entity's real knowledge?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5a" value="a" data-score="0">
+                                        <label for="q5a">Material desires</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5b" value="b" data-score="0">
+                                        <label for="q5b">Karma</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5c" value="c" data-score="10">
+                                        <label for="q5c">Maya in the form of lust</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5d" value="d" data-score="0">
+                                        <label for="q5d">The material body</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="controls">
+                                <button type="button" class="btn" onclick="previousQuestion()">Previous</button>
+                                <button type="submit" class="btn">Submit Answers</button>
+                                <button type="button" class="btn" onclick="nextQuestion()">Next</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+
+                document.querySelector('.container').innerHTML = quizHTML;
+            } else if (chapterNumber === 8) {
+                const quizHTML = `
+                    <div class="quiz-container">
+                        <div class="quiz-header">
+                            <h1>Chapter 8: Attaining the Supreme</h1>
+                            <p>Test your understanding with these questions</p>
+                        </div>
+
+                        <form id="quiz-form" onsubmit="calculateScore(event)">
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>1.</span> What is the ultimate goal of life according to Chapter 8?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1a" value="a" data-score="10">
+                                        <label for="q1a">Attaining the Supreme</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1b" value="b" data-score="0">
+                                        <label for="q1b">Accumulating wealth</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1c" value="c" data-score="0">
+                                        <label for="q1c">Achieving fame</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q1" id="q1d" value="d" data-score="0">
+                                        <label for="q1d">Gaining power</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>2.</span> What determines the state of being one attains after death?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2a" value="a" data-score="0">
+                                        <label for="q2a">The amount of wealth one has</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2b" value="b" data-score="10">
+                                        <label for="q2b">The state of mind at the time of death</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2c" value="c" data-score="0">
+                                        <label for="q2c">The number of friends one has</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q2" id="q2d" value="d" data-score="0">
+                                        <label for="q2d">The physical strength one possesses</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>3.</span> What is the significance of remembering Krishna at the time of death?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3a" value="a" data-score="10">
+                                        <label for="q3a">It ensures one attains Krishna's abode</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3b" value="b" data-score="0">
+                                        <label for="q3b">It grants one material wealth</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3c" value="c" data-score="0">
+                                        <label for="q3c">It provides one with physical strength</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q3" id="q3d" value="d" data-score="0">
+                                        <label for="q3d">It gives one fame and power</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>4.</span> What is the nature of the material world according to Chapter 8?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4a" value="a" data-score="0">
+                                        <label for="q4a">It is eternal and unchanging</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4b" value="b" data-score="10">
+                                        <label for="q4b">It is temporary and full of miseries</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4c" value="c" data-score="0">
+                                        <label for="q4c">It is a place of eternal happiness</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q4" id="q4d" value="d" data-score="0">
+                                        <label for="q4d">It is a place of unlimited resources</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question-card">
+                                <div class="question">
+                                    <span>5.</span> What is the ultimate destination for those who attain Krishna's abode?
+                                </div>
+                                <div class="options">
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5a" value="a" data-score="0">
+                                        <label for="q5a">They return to the material world</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5b" value="b" data-score="0">
+                                        <label for="q5b">They attain temporary happiness</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5c" value="c" data-score="10">
+                                        <label for="q5c">They never return to the material world</label>
+                                    </div>
+                                    <div class="option">
+                                        <input type="radio" name="q5" id="q5d" value="d" data-score="0">
+                                        <label for="q5d">They gain material wealth</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="controls">
+                                <button type="button" class="btn" onclick="previousQuestion()">Previous</button>
+                                <button type="submit" class="btn">Submit Answers</button>
+                                <button type="button" class="btn" onclick="nextQuestion()">Next</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+
+                document.querySelector('.container').innerHTML = quizHTML;
+            } else {
+                alert(`Quiz for Chapter ${chapterNumber} will be available soon!`);
+            }
+        }
+
+        function calculateScore(event) {
+            event.preventDefault();
+            let totalScore = 0;
+            const form = document.getElementById('quiz-form');
+            const questions = form.querySelectorAll('.question-card');
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            // Disable all radio buttons and hide submit button
+            form.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = true;
+            });
+            submitButton.style.display = 'none';
+
+            questions.forEach(question => {
+                const selectedOption = question.querySelector('input[type="radio"]:checked');
+                const allOptions = question.querySelectorAll('.option');
+                const correctOption = question.querySelector('input[data-score="10"]').closest('.option');
+
+                // Always show the correct answer
+                correctOption.classList.add('correct');
+
+                if (selectedOption) {
+                    const selectedOptionDiv = selectedOption.closest('.option');
+                    if (selectedOption.dataset.score === "10") {
+                        totalScore += 10;
+                    } else {
+                        selectedOptionDiv.classList.add('incorrect');
+                    }
+                }
+
+                // Add explanation
+                let explanation = question.querySelector('.answer-explanation');
+                if (!explanation) {
+                    explanation = document.createElement('div');
+                    explanation.className = 'answer-explanation';
+                    question.appendChild(explanation);
+                }
+
+                if (selectedOption) {
+                    if (selectedOption.dataset.score === "10") {
+                        explanation.innerHTML = '<strong>✓ Correct!</strong> Well done!';
+                    } else {
+                        explanation.innerHTML = '<strong>✗ Incorrect.</strong> The correct answer is highlighted in green.';
+                    }
+                } else {
+                    explanation.innerHTML = '<strong>Not answered.</strong> The correct answer is highlighted in green.';
+                }
+                explanation.classList.add('show');
+            });
+
+            const scorePercentage = (totalScore / (questions.length * 10)) * 100;
+
+            // Save score
+            const quizScores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+            quizScores['bg'] = {
+                score: scorePercentage,
+                date: new Date().toISOString(),
+                title: 'Bhagavad Gita Chapter 7'
+            };
+            localStorage.setItem('quizScores', JSON.stringify(quizScores));
+
+            // Add score display at the top
+            const scoreDisplay = document.createElement('div');
+            scoreDisplay.className = 'score-display';
+            scoreDisplay.innerHTML = `
+                <h2>Your Score: ${scorePercentage}%</h2>
+                <div class="controls">
+                    <button class="btn" onclick="location.reload()">Try Again</button>
+                    <a href="/HTML/dashboard.html" class="btn">View Dashboard</a>
+                </div>
+            `;
+
+            const quizContainer = document.querySelector('.quiz-container');
+            quizContainer.insertBefore(scoreDisplay, form);
+
+            // Remove navigation buttons
+            const controls = form.querySelector('.controls');
+            if (controls) {
+                controls.remove();
+            }
+
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function retryQuiz() {
+            const form = document.getElementById('quiz-form');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+
+            form.reset();
+            form.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            form.querySelectorAll('.answer-explanation').forEach(exp => {
+                exp.classList.remove('show');
+            });
+
+            form.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
+
+            form.querySelector('button[type="submit"]').style.display = 'block';
+            scoreDisplay.classList.remove('show');
+        }
+
+        // Check if user is logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = '/index.html';
+        }
+    </script>
+</body>
+
+</html>

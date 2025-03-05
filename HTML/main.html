@@ -4,17 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="/assets/om-symbol.svg">
+    <link rel="icon" type="image/webp" href="/assets/logo.webp">
     <link rel="stylesheet" href="/CSS/style.css">
     <title>Bhakti Quiz - Spiritual Knowledge Test</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
         body {
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             color: white;
             position: relative;
             background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
@@ -166,9 +168,11 @@
         }
 
         .start-quiz-btn {
+            font-size: larger;
             display: inline-block;
             padding: 0.8rem 1.5rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Lobster', cursive;
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -190,7 +194,7 @@
             to {
                 opacity: 1;
             }
-        }
+            }
 
         @keyframes slideUp {
             to {
@@ -513,6 +517,30 @@
                 behavior: 'smooth'
             });
         });
+
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = '/index.html';
+                return;
+            }
+            
+            // Update UI with user info
+            const userName = document.getElementById('userName');
+            if (userName) {
+                userName.textContent = user.displayName || user.email.split('@')[0];
+            }
+        });
+
+        // Update logout function
+        function handleLogout() {
+            auth.signOut().then(() => {
+                localStorage.clear();
+                window.location.href = '/index.html';
+            }).catch((error) => {
+                console.error('Error signing out:', error);
+            });
+        }
     </script>
 </body>
 

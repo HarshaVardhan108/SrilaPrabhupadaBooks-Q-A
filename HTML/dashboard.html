@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="/assets/om-symbol.svg">
+    <link rel="icon" type="image/webp" href="/assets/logo.webp">
     <link rel="stylesheet" href="/CSS/style.css">
     <title>Bhakti Quiz - Spiritual Knowledge Test</title>
     <style>
@@ -256,50 +256,43 @@
     </div>
 
     <script>
-        // Check if user is logged in
-        if (!localStorage.getItem('isLoggedIn')) {
-            window.location.href = '/index.html';
-        }
-
-        // Get user info from localStorage
-        const userInfo = {
-            name: localStorage.getItem('userName') || 'User Name',
-            email: localStorage.getItem('userEmail') || 'user@email.com'
-        };
-
-        // Update user info in the DOM
-        document.querySelector('.user-details h2').textContent = userInfo.name;
-        document.querySelector('.user-details p').textContent = userInfo.email;
-        document.querySelector('.user-avatar').textContent = userInfo.name[0].toUpperCase();
-
-        function handleLogout() {
-            localStorage.removeItem('isLoggedIn');
-            window.location.href = '/index.html';
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diff = now - date;
-
-            if (diff < 24 * 60 * 60 * 1000) {
-                return 'Today';
-            } else if (diff < 48 * 60 * 60 * 1000) {
-                return 'Yesterday';
-            } else {
-                return date.toLocaleDateString();
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = '/index.html';
+                return;
             }
+            
+            // Load user's quiz scores
+            loadQuizScores();
+            
+            // Update UI with user info
+            const userDetails = document.querySelector('.user-details');
+            if (userDetails) {
+                userDetails.innerHTML = `
+                    <h2>${user.displayName || user.email.split('@')[0]}</h2>
+                    <p>${user.email}</p>
+                    <p>Quizzes completed: <strong>0</strong></p>
+                `;
+            }
+        });
+
+        // Update logout function
+        function handleLogout() {
+            auth.signOut().then(() => {
+                localStorage.clear();
+                window.location.href = '/index.html';
+            }).catch((error) => {
+                console.error('Error signing out:', error);
+            });
         }
 
-        function updateScores() {
+        // Update loadQuizScores function
+        function loadQuizScores() {
             const scoresGrid = document.getElementById('scoresGrid');
             const quizScores = JSON.parse(localStorage.getItem('quizScores') || '{}');
-            const completedQuizzes = Object.keys(quizScores).length;
-
-            // Update total quizzes completed
-            document.querySelector('.user-details p:last-child strong').textContent = completedQuizzes;
-
-            if (completedQuizzes === 0) {
+            
+            if (Object.keys(quizScores).length === 0) {
                 scoresGrid.innerHTML = `
                     <div class="no-scores">
                         <h3>No quizzes completed yet</h3>
@@ -311,7 +304,6 @@
             }
 
             scoresGrid.innerHTML = '';
-            
             Object.entries(quizScores).forEach(([bookId, data]) => {
                 const scoreCard = document.createElement('div');
                 scoreCard.className = 'score-card';
@@ -324,14 +316,11 @@
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: ${data.score}%"></div>
                     </div>
-                    <a href="${bookId}.html" class="retry-btn">Retry Quiz</a>
+                    <a href="${bookUrls[bookId] || '/HTML/main.html'}" class="retry-btn">Retry Quiz</a>
                 `;
                 scoresGrid.appendChild(scoreCard);
             });
         }
-
-        // Update scores when page loads
-        updateScores();
 
         // Update back button
         function goBack() {

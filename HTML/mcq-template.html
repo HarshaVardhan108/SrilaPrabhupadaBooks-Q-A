@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/webp" href="/assets/logo.webp">
+    <title>Book Title - Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --heading-font: 'Orbitron', sans-serif;
+            --body-font: 'Quicksand', sans-serif;
+            --number-font: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
+            font-family: var(--body-font);
+            color: white;
+            letter-spacing: 0.3px;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .quiz-title {
+            font-family: var(--heading-font);
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .quiz-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #a5b4fc, transparent);
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .question {
+            font-family: var(--heading-font);
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: #e0e7ff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding-left: 2.5rem;
+        }
+
+        .question::before {
+            content: attr(data-number);
+            font-family: var(--number-font);
+            position: absolute;
+            left: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #a5b4fc;
+            opacity: 0.5;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option label {
+            display: block;
+            cursor: pointer;
+            padding-left: 2rem;
+            position: relative;
+            font-family: var(--body-font);
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .option label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .option input[type="radio"]:checked + label::before {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            font-family: var(--heading-font);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(165,180,252,0.1) 100%);
+            border: 2px solid rgba(165,180,252,0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(165,180,252,0.2) 100%);
+            border-color: rgba(165,180,252,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .score-display.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .correct {
+            background: rgba(76, 175, 80, 0.2) !important;
+            border-color: #4CAF50 !important;
+        }
+
+        .incorrect {
+            background: rgba(244, 67, 54, 0.2) !important;
+            border-color: #F44336 !important;
+        }
+
+        @keyframes textGlow {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(165,180,252,0.5);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(165,180,252,0.8);
+            }
+        }
+
+        .quiz-title {
+            animation: textGlow 3s infinite;
+        }
+
+        .question-card:nth-child(2) { animation-delay: 0.2s; }
+        .question-card:nth-child(3) { animation-delay: 0.4s; }
+        .question-card:nth-child(4) { animation-delay: 0.6s; }
+        .question-card:nth-child(5) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(165,180,252,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .option:hover::before {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">Book Title Quiz</h1>
+        </div>
+
+        <form id="quiz-form">
+            <div class="question-card">
+                <div class="question">1. Question text goes here?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1a" value="a" data-score="10">
+                        <label for="q1a">Option A</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1b" value="b" data-score="0">
+                        <label for="q1b">Option B</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1c" value="c" data-score="0">
+                        <label for="q1c">Option C</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" id="q1d" value="d" data-score="0">
+                        <label for="q1d">Option D</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more question cards here -->
+
+            <div class="controls">
+                <button type="submit" class="btn">Submit Answers</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = '/index.html';
+        }
+
+        const form = document.getElementById('quiz-form');
+        form.addEventListener('submit', calculateScore);
+
+        function calculateScore(event) {
+            event.preventDefault();
+            let totalScore = 0;
+            const questions = form.querySelectorAll('.question-card');
+            
+            questions.forEach(question => {
+                const selectedOption = question.querySelector('input[type="radio"]:checked');
+                if (selectedOption) {
+                    totalScore += parseInt(selectedOption.dataset.score);
+                    
+                    // Show correct/incorrect answers
+                    const options = question.querySelectorAll('.option');
+                    options.forEach(option => {
+                        const radio = option.querySelector('input[type="radio"]');
+                        if (radio.dataset.score === "10") {
+                            option.classList.add('correct');
+                        } else if (radio === selectedOption) {
+                            option.classList.add('incorrect');
+                        }
+                    });
+                }
+            });
+
+            const scorePercentage = (totalScore / (questions.length * 10)) * 100;
+            
+            // Save score
+            const quizScores = JSON.parse(localStorage.getItem('quizScores') || '{}');
+            quizScores['book_id'] = {
+                score: scorePercentage,
+                date: new Date().toISOString(),
+                title: 'Book Title'
+            };
+            localStorage.setItem('quizScores', JSON.stringify(quizScores));
+
+            // Show score
+            const scoreDisplay = document.createElement('div');
+            scoreDisplay.className = 'score-display';
+            scoreDisplay.innerHTML = `
+                <h2>Your Score: ${scorePercentage}%</h2>
+                <div class="controls">
+                    <button class="btn" onclick="location.reload()">Try Again</button>
+                    <a href="/HTML/dashboard.html" class="btn">View Dashboard</a>
+                </div>
+            `;
+            
+            form.insertBefore(scoreDisplay, form.firstChild);
+            scoreDisplay.classList.add('show');
+            
+            // Disable form
+            form.querySelectorAll('input').forEach(input => input.disabled = true);
+            form.querySelector('button[type="submit"]').style.display = 'none';
+        }
+    </script>
+</body>
+</html> 
